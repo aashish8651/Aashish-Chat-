@@ -375,7 +375,7 @@ image.addEventListener("change", async () => {
 // ======================
 // AUDIO / VIDEO CALL
 // ======================
-
+const roomId = [myId, otherId].sort().join("_");
 async function startCall(type) {
 
   const callId = Date.now().toString();
@@ -383,7 +383,7 @@ async function startCall(type) {
   localStorage.setItem("callId", callId);
   localStorage.setItem("callType", type);
 
-  await set(ref(db, "calls/" + otherId), {
+  await set(ref(db, "calls/" + roomId), {
 
     callId: callId,
     callerId: myId,
