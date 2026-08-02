@@ -173,6 +173,28 @@ startMedia().then(() => {
         createOffer();
     }
 });
+onValue(ref(db, "calls/" + roomId), (snap) => {
+
+  if (!snap.exists()) return;
+
+  const data = snap.val();
+
+  if (data.status === "rejected") {
+
+    alert("❌ Call Rejected");
+
+    if (peer) peer.close();
+
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+    }
+
+    clearInterval(timerInterval);
+
+    window.location.href = "private.html";
+  }
+
+});
 // ===============================
 // CREATE OFFER
 // ===============================
@@ -429,17 +451,3 @@ onValue(ref(db, "calls/" + roomId), (snap) => {
   }
 
 });
-
-// ===============================
-// CALL CONNECTED
-// ===============================
-
-peer.onconnectionstatechange = () => {
-
-  switch (peer.connectionState) {
-
-    case "connecting":
-      callTitle.innerText = "Connecting...";
-      break;
-
-    case "
