@@ -32,9 +32,7 @@ const myPhoto = localStorage.getItem("myPhoto") || "";
 const otherId = localStorage.getItem("chatWith");
 const otherName = localStorage.getItem("chatWithName");
 const otherPhoto = localStorage.getItem("chatWithPhoto") || "";
-
 const roomId = [myId, otherId].sort().join("_");
-
 // HTML Elements
 const profilePhoto = document.getElementById("profilePhoto");
 const chatTitle = document.getElementById("chatTitle");
@@ -375,7 +373,6 @@ image.addEventListener("change", async () => {
 // ======================
 // AUDIO / VIDEO CALL
 // ======================
-const roomId = [myId, otherId].sort().join("_");
 async function startCall(type) {
 
   const callId = Date.now().toString();
@@ -422,7 +419,7 @@ const acceptCall = document.getElementById("acceptCall");
 const rejectCall = document.getElementById("rejectCall");
 const ringtone = document.getElementById("ringtone");
 
-onValue(ref(db, "calls/" + myId), (snap) => {
+onValue(ref(db, "calls/" + roomId), (snap) => {
 
   if (!snap.exists()) return;
 
@@ -442,9 +439,9 @@ onValue(ref(db, "calls/" + myId), (snap) => {
     ringtone.pause();
     ringtone.currentTime = 0;
 
-    update(ref(db, "calls/" + myId), {
-      status: "accepted"
-    });
+    update(ref(db, "calls/" + roomId), {
+  status: "accepted"
+});
 
     localStorage.setItem("callId", call.callId);
     localStorage.setItem("callType", call.type);
@@ -459,11 +456,7 @@ onValue(ref(db, "calls/" + myId), (snap) => {
     ringtone.pause();
     ringtone.currentTime = 0;
 
-    update(ref(db, "calls/" + myId), {
-  status: "rejected"
-});
-
-update(ref(db, "calls/" + call.callerId), {
+    update(ref(db, "calls/" + roomId), {
   status: "rejected",
   callId: call.callId
 });
