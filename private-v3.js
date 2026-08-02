@@ -453,15 +453,40 @@ onValue(ref(db, "calls/" + myId), (snap) => {
     window.location.href = "call.html";
 
   };
+onValue(ref(db, "calls/" + otherId), (snap) => {
+  if (!snap.exists()) return;
 
+  const call = snap.val();
+
+  if (call.callId !== localStorage.getItem("callId")) return;
+
+  if (call.status === "rejected") {
+    alert("❌ Call Rejected");
+    window.location.href = "private.html";
+  }
+
+  if (call.status === "accepted") {
+    window.location.href = "call.html";
+  }
+});
   rejectCall.onclick = () => {
 
     ringtone.pause();
     ringtone.currentTime = 0;
 
     update(ref(db, "calls/" + myId), {
-      status: "rejected"
-    });
+  status: "rejected"
+});
+
+update(ref(db, "calls/" + call.callerId), {
+  status: "rejected",
+  callId: call.callId
+});
+
+update(ref(db, "calls/" + call.callerId), {
+  status: "rejected",
+  callId: call.callId
+});
 
     incomingCall.style.display = "none";
 
