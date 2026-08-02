@@ -166,10 +166,12 @@ function startTimer() {
 
 }
 
+const isCaller = localStorage.getItem("isCaller") === "true";
+
 startMedia().then(() => {
-
-  createOffer();
-
+    if (isCaller) {
+        createOffer();
+    }
 });
 // ===============================
 // CREATE OFFER
