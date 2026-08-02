@@ -60,7 +60,7 @@ findUser.onclick = async () => {
     return;
   }
 
-  const snap = await get(ref(db, "users/" + id));
+  const snap =  get(ref(db, "users/" + id));
 
   if (!snap.exists()) {
     alert("User Not Found");
