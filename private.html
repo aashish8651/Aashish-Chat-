@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Private Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div style="text-align:center;padding:10px;">
+
+  <img
+    id="profilePhoto"
+    src="https://via.placeholder.com/80"
+    width="80"
+    height="80"
+    style="border-radius:50%;object-fit:cover;">
+
+  <h2 id="chatTitle">Private Chat</h2>
+<div style="text-align:center;margin:10px;">
+
+  <button id="audioCallBtn">📞 Audio</button>
+
+  <button id="videoCallBtn">🎥 Video</button>
+
+</div>
+  <p id="userStatus" style="margin-top:-10px;color:lime;">
+    🟢 Online
+  </p>
+
+</div>
+
+<div id="messages"></div>
+
+<p id="typing" style="color:#00ff99;text-align:center;"></p>
+<input
+  type="file"
+  id="image"
+  accept="image/*"
+  style="display:none;">
+
+<button id="imageBtn">📷</button>
+<input type="text" id="msg" placeholder="Type message...">
+
+<button id="send">Send</button>
+<audio id="ringtone" loop>
+  <source src="ring.mp3" type="audio/mpeg">
+</audio>
+<script type="module" src="private-v3.js"></script>
+<div id="incomingCall" style="display:none;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#222;
+padding:20px;
+border-radius:12px;
+text-align:center;
+color:white;
+z-index:9999;">
+
+<h3 id="callerName">Incoming Call</h3>
+
+<button id="acceptCall">
+✅ Accept
+</button>
+
+<button id="rejectCall">
+❌ Reject
+</button>
+
+</div>
+</body>
+</html>

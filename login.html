@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aashish Chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Aashish Chat</h1>
+
+<div class="loginBox">
+
+<h2>Sign Up</h2>
+
+<input type="text" id="name" placeholder="Your Name">
+
+<input type="text" id="userid" placeholder="Choose Unique User ID">
+
+<input type="text" id="mobile" placeholder="Mobile Number">
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Password">
+
+<input type="file" id="photo" accept="image/*">
+<img
+  id="preview"
+  src="https://via.placeholder.com/100"
+  width="100"
+  height="100"
+  style="border-radius:50%;margin-top:10px;object-fit:cover;">
+<button id="signupBtn">Sign Up</button>
+
+<hr>
+
+<h2>Login</h2>
+
+<input type="email" id="loginEmail" placeholder="Email">
+
+<input type="password" id="loginPassword" placeholder="Password">
+
+<button id="loginBtn">Login</button>
+<p style="text-align:center;">
+  <a href="#" id="forgotPassword">Forgot Password?</a>
+</p>
+</div>
+
+<script type="module" src="login.js"></script>
+
+</body>
+</html>
