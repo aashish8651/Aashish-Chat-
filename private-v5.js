@@ -395,3 +395,190 @@ videoCallBtn.onclick = () => {
 };
 
 console.log("✅ PRIVATE V5 FULLY LOADED");
+// ===============================
+// INCOMING CALL LISTENER
+// ===============================
+
+const incomingRef = ref(db, "calls/" + roomId);
+
+onValue(incomingRef, (snap) => {
+
+    if (!snap.exists()) return;
+
+    const call = snap.val();
+
+    // मैं Caller हूँ
+    if (call.callerId === myId) return;
+
+    // अगर मेरे लिए Call आई है
+    if (
+        call.receiverId === myId &&
+        call.status === "ringing"
+    ) {
+
+        const box = document.getElementById("incomingCall");
+
+        const caller = document.getElementById("callerName");
+
+        caller.innerText =
+            (call.callerName || "Unknown") +
+            " is calling...";
+
+        box.style.display = "block";
+
+    }
+
+});
+
+console.log("✅ Incoming Listener Loaded");
+// ===============================
+// ACCEPT / REJECT BUTTONS
+// ===============================
+
+const acceptBtn = document.getElementById("acceptCall");
+const rejectBtn = document.getElementById("rejectCall");
+const incomingBox = document.getElementById("incomingCall");
+
+acceptBtn.onclick = async () => {
+
+    const snap = await get(incomingRef);
+
+    if (!snap.exists()) return;
+
+    const call = snap.val();
+
+    localStorage.setItem("callId", call.callId);
+    localStorage.setItem("callType", call.type);
+    localStorage.setItem("isCaller", "false");
+
+    await update(incomingRef, {
+        status: "accepted",
+        acceptedTime: Date.now()
+    });
+
+    incomingBox.style.display = "none";
+
+    window.location.href = "call.html";
+};
+
+rejectBtn.onclick = async () => {
+
+    await update(incomingRef, {
+        status: "rejected"
+    });
+
+    incomingBox.style.display = "none";
+};
+
+console.log("✅ Accept / Reject Ready");
+// ===============================
+// CALL STATUS LISTENER
+// ===============================
+
+onValue(incomingRef, (snap) => {
+
+    if (!snap.exists()) return;
+
+    const call = snap.val();
+
+    // सिर्फ Caller के लिए
+    if (call.callerId !== myId) return;
+
+    if (call.status === "accepted") {
+
+        localStorage.setItem("callId", call.callId);
+        localStorage.setItem("callType", call.type);
+        localStorage.setItem("isCaller", "true");
+
+        window.location.href = "call.html";
+
+    }
+
+    if (call.status === "rejected") {
+
+        alert("❌ User Rejected Your Call");
+
+    }
+
+});
+// ===============================
+// INCOMING PART 4
+// CLEANUP + MISSED CALL
+// ===============================
+
+// Caller Cancel
+window.addEventListener("beforeunload", async () => {
+
+    try {
+
+        const snap = await get(incomingRef);
+
+        if (!snap.exists()) return;
+
+        const call = snap.val();
+
+        if (
+            call.callerId === myId &&
+            call.status === "ringing"
+        ) {
+
+            await update(incomingRef, {
+                status: "cancelled"
+            });
+
+        }
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+
+});
+
+// Receiver Listen
+onValue(incomingRef, (snap) => {
+
+    if (!snap.exists()) return;
+
+    const call = snap.val();
+
+    if (
+        call.receiverId === myId &&
+        call.status === "cancelled"
+    ) {
+
+        incomingBox.style.display = "none";
+
+    }
+
+});
+
+// Missed Call
+setTimeout(async () => {
+
+    try {
+
+        const snap = await get(incomingRef);
+
+        if (!snap.exists()) return;
+
+        const call = snap.val();
+
+        if (call.status === "ringing") {
+
+            await update(incomingRef, {
+                status: "missed"
+            });
+
+        }
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+
+}, 30000);
+
+console.log("✅ Incoming Part 4 Loaded");
